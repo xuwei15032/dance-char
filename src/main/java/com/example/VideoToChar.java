@@ -68,10 +68,13 @@ public class VideoToChar {
         LOGGER.info("合成视频完成： " + outPath + "/" + outName);
     }
 
+    /**
+     * 视频分割成字符图片并保存到临时文件夹
+     */
     private int mp4ToCharImg(String cachePath, String videoPath, String outPath, String outName, int charWidthNum,
             int fontSize)
             throws Exception {
-                
+
         ExecutorService executor = Executors.newFixedThreadPool(32);
         int imgIndex = 0;
         List<Future<?>> futures = new ArrayList<>();
@@ -92,7 +95,9 @@ public class VideoToChar {
                 Java2DFrameConverter converter = new Java2DFrameConverter();
                 BufferedImage bufferedImage = converter.convert(frame);
                 if (bufferedImage != null) {
+                    //图片转为字符数组
                     charArray = imgToGray(bufferedImage, charWidthNum);
+                    //根据字符数组画出字符图片
                     BufferedImage resImg = getImageByCharArray(charArray, grabber.getImageWidth(),
                             grabber.getImageHeight(), charWidthNum, fontSize);
                     final int imgIndexF = imgIndex;
